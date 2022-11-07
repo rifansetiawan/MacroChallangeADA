@@ -27,8 +27,7 @@ func NewService(repository Repository) *service {
 
 func (s *service) RegisterUser(input RegisterUserInput) (User, error) {
 	user := User{}
-	user.FirstName = input.FirstName
-	user.LastName = input.LastName
+	user.UserName = input.UserName
 	user.Email = input.Email
 
 	passwordHash, err := bcrypt.GenerateFromPassword([]byte(input.Password), bcrypt.MinCost)
@@ -128,8 +127,7 @@ func (s *service) UpdateUser(input FormUpdateUserInput) (User, error) {
 		return user, err
 	}
 
-	user.FirstName = input.FirstName
-	user.LastName = input.LastName
+	user.UserName = input.UserName
 	user.Email = input.Email
 
 	updatedUser, err := s.repository.Update(user)

@@ -1,12 +1,12 @@
 package main
 
 import (
+	"kaia/auth"
+	"kaia/handler"
+	"kaia/helper"
+	"kaia/user"
 	"log"
 	"net/http"
-	"pasardanamobile/auth"
-	"pasardanamobile/handler"
-	"pasardanamobile/helper"
-	"pasardanamobile/user"
 	"path/filepath"
 	"strings"
 
@@ -21,7 +21,7 @@ import (
 )
 
 func main() {
-	dsn := "root:1234@tcp(127.0.0.1:3306)/pasardanamobile?charset=utf8mb4&parseTime=True&loc=Local"
+	dsn := "root:1234@tcp(127.0.0.1:3306)/kaia?charset=utf8mb4&parseTime=True&loc=Local"
 	//dsn server
 	// dsn := "rifan:1234@tcp(135.148.157.241:3306)/pasardanamobile?charset=utf8mb4&parseTime=True&loc=Local"
 
@@ -39,6 +39,7 @@ func main() {
 	userHandler := handler.NewUserHandler(userService, authService)
 
 	router := gin.Default()
+	addr := ":3333"
 	router.Use(cors.Default())
 	router.Static("/images", "./images")
 
@@ -54,7 +55,7 @@ func main() {
 	// api.POST("/stocks", userHandler.UploadAvatar)
 	api.GET("/users/fetch", authMiddleware(authService, userService), userHandler.FetchUser)
 
-	router.Run()
+	router.Run(addr)
 }
 
 func authMiddleware(authService auth.Service, userService user.Service) gin.HandlerFunc {

@@ -1,8 +1,7 @@
 package user
 
 type RegisterUserInput struct {
-	FirstName   string `json:"first_name" binding:"required"`
-	LastName    string `json:"last_name" binding:"required"`
+	UserName    string `json:"user_name" binding:"required"`
 	Email       string `json:"email" binding:"required,email"`
 	Password    string `json:"password" binding:"required"`
 	PhoneNumber string `json:"phone_number"`
@@ -27,8 +26,7 @@ type FormCreateUserInput struct {
 
 type FormUpdateUserInput struct {
 	UUID       string
-	FirstName  string `form:"first_name" binding:"required"`
-	LastName   string `form:"last_name" binding:"required"`
+	UserName   string `form:"user_name" binding:"required"`
 	Name       string `form:"name" binding:"required"`
 	Email      string `form:"email" binding:"required,email"`
 	Occupation string `form:"occupation" binding:"required"`

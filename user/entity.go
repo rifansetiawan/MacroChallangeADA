@@ -4,8 +4,7 @@ import "time"
 
 type User struct {
 	UUID           string
-	FirstName      string
-	LastName       string
+	UserName       string
 	Email          string
 	PasswordHash   string
 	AvatarFileName string

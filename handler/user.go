@@ -2,10 +2,10 @@ package handler
 
 import (
 	"fmt"
+	"kaia/auth"
+	"kaia/helper"
+	"kaia/user"
 	"net/http"
-	"pasardanamobile/auth"
-	"pasardanamobile/helper"
-	"pasardanamobile/user"
 
 	"github.com/gin-gonic/gin"
 )
