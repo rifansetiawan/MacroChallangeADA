@@ -182,6 +182,8 @@ func (h *userHandler) FetchUser(c *gin.Context) {
 }
 
 func (h *userHandler) AuthToken(c *gin.Context) {
+	currentUser := c.MustGet("currentUser").(user.User)
+	fmt.Println(currentUser)
 	var responsetoreturn interface{}
 	client := http.Client{}
 	req, err := http.NewRequest("GET", "https://api.onebrick.io/v1/auth/token", nil)
