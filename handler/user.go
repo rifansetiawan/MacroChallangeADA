@@ -72,7 +72,9 @@ func (h *userHandler) Login(c *gin.Context) {
 	if err != nil {
 		errorMessage := gin.H{"errors": err.Error()}
 
-		response := helper.APIResponse("Login failed", http.StatusUnprocessableEntity, "error", errorMessage)
+		errorMessageString := errorMessage["errors"].(string)
+
+		response := helper.APIResponseArray("Login failed", http.StatusUnprocessableEntity, "error", errorMessageString)
 		c.JSON(http.StatusUnprocessableEntity, response)
 		return
 	}
