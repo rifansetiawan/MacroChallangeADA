@@ -181,27 +181,102 @@ func (h *userHandler) FetchUser(c *gin.Context) {
 
 }
 
+type DataData struct {
+	Data struct {
+		AccessToken string
+	}
+}
+
 func (h *userHandler) AuthToken(c *gin.Context) {
 	currentUser := c.MustGet("currentUser").(user.User)
 	fmt.Println(currentUser)
-	var responsetoreturn interface{}
-	client := http.Client{}
-	req, err := http.NewRequest("GET", "https://api.onebrick.io/v1/auth/token", nil)
-	if err != nil {
-		//Handle Error
+	if currentUser.UserName == "rifanganteng" {
+		var respGetInstList interface{}
+
+		// publicToken := d.Data.AccessToken
+		// fmt.Println(publicToken)
+
+		clientGetInstList := http.Client{}
+		reqGetInstList, err := http.NewRequest("GET", "https://api.onebrick.io/v1/institution/list", nil)
+		if err != nil {
+			//Handle Error
+		}
+
+		reqGetInstList.Header = http.Header{
+			"Content-Type":  {"application/json"},
+			"Authorization": {"Bearer public-production-ad98df55-fa5a-4664-8049-a5bfe4224887 "},
+		}
+
+		resGetInstList, err := clientGetInstList.Do(reqGetInstList)
+
+		defer resGetInstList.Body.Close()
+
+		err = json.NewDecoder(resGetInstList.Body).Decode(&respGetInstList)
+
+		c.JSON(200, respGetInstList)
 	}
+	// var responsetoreturn [string]interface{}
+	// client := http.Client{}
+	// req, err := http.NewRequest("GET", "https://api.onebrick.io/v1/auth/token", nil)
+	// if err != nil {
+	// 	//Handle Error
+	// }
 
-	req.Header = http.Header{
-		"Content-Type":  {"application/json"},
-		"Authorization": {"Bearer ZjAzMzg1NzItZjQ2NC00NjQ2LTk1MjktNWMyZWE4MDA1MTRhOjJGVHd5N1FIdHNiRTZiRzdETnVjSk9TSnBrWTBuMw=="},
+	// req.Header = http.Header{
+	// 	"Content-Type":  {"application/json"},
+	// 	"Authorization": {"Bearer ZjAzMzg1NzItZjQ2NC00NjQ2LTk1MjktNWMyZWE4MDA1MTRhOjJGVHd5N1FIdHNiRTZiRzdETnVjSk9TSnBrWTBuMw=="},
+	// }
+
+	// res, err := client.Do(req)
+
+	// defer res.Body.Close()
+
+	// err = json.NewDecoder(res.Body).Decode(&responsetoreturn)
+	// body, _ := ioutil.ReadAll(res.Body)
+	// d := DataData{}
+
+	// json.Unmarshal([]byte(responsetoreturn), &d)
+
+	// fmt.Println(d)
+	// //get institution list
+
+}
+
+func (h *userHandler) AuthTokenToAccessToken(c *gin.Context) {
+	currentUser := c.MustGet("currentUser").(user.User)
+	fmt.Println(currentUser)
+
+	if currentUser.UserName == "rifanganteng" {
+		var respGetInstList interface{}
+
+		// publicToken := d.Data.AccessToken
+		// fmt.Println(publicToken)
+		// var jsonStr = []byte(`
+		// 	{
+		// 		"institution_id" : 2,
+		// 		"username" : "AMMADRIF0122",
+		// 		"password": 252354
+		// 	}
+		// `)
+
+		clientGetInstList := http.Client{}
+		reqGetInstList, err := http.NewRequest("POST", "https://api.onebrick.io/v1/auth", c.Request.Body)
+		if err != nil {
+			//Handle Error
+		}
+
+		reqGetInstList.Header = http.Header{
+			"Content-Type":  {"application/json"},
+			"Authorization": {"Bearer public-production-ad98df55-fa5a-4664-8049-a5bfe4224887 "},
+		}
+
+		resGetInstList, err := clientGetInstList.Do(reqGetInstList)
+
+		defer resGetInstList.Body.Close()
+
+		err = json.NewDecoder(resGetInstList.Body).Decode(&respGetInstList)
+
+		c.JSON(200, respGetInstList)
 	}
-
-	res, err := client.Do(req)
-
-	defer res.Body.Close()
-
-	err = json.NewDecoder(res.Body).Decode(&responsetoreturn)
-
-	c.JSON(200, responsetoreturn)
 
 }
