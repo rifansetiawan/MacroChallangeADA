@@ -54,7 +54,6 @@ func main() {
 	api.POST("/avatars", authMiddleware(authService, userService), userHandler.UploadAvatar)
 	api.GET("/auth/token", authMiddleware(authService, userService), userHandler.AuthToken)
 	api.POST("/auth", authMiddleware(authService, userService), userHandler.AuthTokenToAccessToken)
-	// api.POST("/stocks", userHandler.UploadAvatar)
 	api.GET("/users/fetch", authMiddleware(authService, userService), userHandler.FetchUser)
 
 	router.Run(addr)
