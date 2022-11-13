@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"encoding/json"
 	"fmt"
 	"kaia/auth"
 	"kaia/helper"
@@ -177,5 +178,28 @@ func (h *userHandler) FetchUser(c *gin.Context) {
 	response := helper.APIResponse("Successfuly fetch user data", http.StatusOK, "success", formatter)
 
 	c.JSON(http.StatusOK, response)
+
+}
+
+func (h *userHandler) AuthToken(c *gin.Context) {
+	var responsetoreturn interface{}
+	client := http.Client{}
+	req, err := http.NewRequest("GET", "https://api.onebrick.io/v1/auth/token", nil)
+	if err != nil {
+		//Handle Error
+	}
+
+	req.Header = http.Header{
+		"Content-Type":  {"application/json"},
+		"Authorization": {"Bearer ZjAzMzg1NzItZjQ2NC00NjQ2LTk1MjktNWMyZWE4MDA1MTRhOjJGVHd5N1FIdHNiRTZiRzdETnVjSk9TSnBrWTBuMw=="},
+	}
+
+	res, err := client.Do(req)
+
+	defer res.Body.Close()
+
+	err = json.NewDecoder(res.Body).Decode(&responsetoreturn)
+
+	c.JSON(200, responsetoreturn)
 
 }
