@@ -7,6 +7,13 @@ type RegisterUserInput struct {
 	PhoneNumber string `json:"phone_number"`
 }
 
+type DataSession struct {
+	Username  string `json:"username"`
+	UniqueID  string `json:"uniqueId"`
+	SessionID string `json:"sessionId"`
+	OtpToken  string `json:"otpToken"`
+}
+
 type LoginInput struct {
 	Email    string `json:"email" form:"email" binding:"required,email"`
 	Password string `json:"password" form:"password" binding:"required"`
@@ -14,6 +21,11 @@ type LoginInput struct {
 
 type CheckEmailInput struct {
 	Email string `json:"email" binding:"required,email"`
+}
+
+type PayloadOTP struct {
+	Username string `json:"username" binding:"required"`
+	OTP      int    `json:"otp" binding:"required"`
 }
 
 type FormCreateUserInput struct {

@@ -54,6 +54,9 @@ func main() {
 	api.POST("/avatars", authMiddleware(authService, userService), userHandler.UploadAvatar)
 	api.GET("/auth/token", authMiddleware(authService, userService), userHandler.AuthToken)
 	api.POST("/auth", authMiddleware(authService, userService), userHandler.AuthTokenToAccessToken)
+	api.POST("/auth/gopay", authMiddleware(authService, userService), userHandler.AuthTokenToAccessTokenGopay)
+	api.POST("/auth/gopay/token", authMiddleware(authService, userService), userHandler.OTPSessionToToken)
+
 	api.GET("/users/fetch", authMiddleware(authService, userService), userHandler.FetchUser)
 
 	router.Run(addr)

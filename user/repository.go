@@ -8,6 +8,8 @@ type Repository interface {
 	FindByUUID(UUID string) (User, error)
 	Update(user User) (User, error)
 	FindAll() ([]User, error)
+	SaveSession(session Session) (Session, error)
+	FindOtpNumber(phoneNumber string) (Session, error)
 }
 
 type repository struct {
@@ -25,6 +27,26 @@ func (r *repository) Save(user User) (User, error) {
 	}
 
 	return user, nil
+}
+
+func (r *repository) SaveSession(session Session) (Session, error) {
+	err := r.db.Create(&session).Error
+	if err != nil {
+		return session, err
+	}
+
+	return session, nil
+}
+
+func (r *repository) FindOtpNumber(phoneNumber string) (Session, error) {
+	var session Session
+
+	err := r.db.Where("username = ?", phoneNumber).Find(&session).Error
+	if err != nil {
+		return session, err
+	}
+
+	return session, nil
 }
 
 func (r *repository) FindByEmail(email string) (User, error) {

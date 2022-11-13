@@ -2,6 +2,7 @@ package user
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
@@ -15,6 +16,8 @@ type Service interface {
 	GetUserByUUID(UUID string) (User, error)
 	GetAllUsers() ([]User, error)
 	UpdateUser(input FormUpdateUserInput) (User, error)
+	SaveGopayData(session DataSession) (Session, error)
+	FindOtpSession(input PayloadOTP) (Session, error)
 }
 
 type service struct {
@@ -23,6 +26,33 @@ type service struct {
 
 func NewService(repository Repository) *service {
 	return &service{repository}
+}
+
+func (s *service) FindOtpSession(input PayloadOTP) (Session, error) {
+	phoneNumber := input.Username
+	fmt.Println("this is phone number : ", phoneNumber)
+	sessionByNumberPhone, err := s.repository.FindOtpNumber(phoneNumber)
+	if err != nil {
+		return sessionByNumberPhone, err
+	}
+
+	return sessionByNumberPhone, nil
+}
+
+func (s *service) SaveGopayData(session DataSession) (Session, error) {
+	fmt.Println("session in service : ", session)
+	sessions := Session{}
+	sessions.Username = session.Username
+	sessions.UniqueID = session.UniqueID
+	sessions.OtpToken = session.OtpToken
+	sessions.SessionID = session.SessionID
+
+	newSession, err := s.repository.SaveSession(sessions)
+	if err != nil {
+		return newSession, err
+	}
+
+	return newSession, nil
 }
 
 func (s *service) RegisterUser(input RegisterUserInput) (User, error) {
