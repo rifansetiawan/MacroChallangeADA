@@ -1,13 +1,16 @@
 package handler
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
 	"kaia/auth"
 	"kaia/helper"
 	"kaia/user"
+
+	// "kaia/user"
 	"net/http"
+
+	// user "kaia/user"
 
 	"github.com/gin-gonic/gin"
 )
@@ -243,44 +246,29 @@ func (h *userHandler) AuthToken(c *gin.Context) {
 
 }
 
+type RequestAPIV1AUTH struct {
+	InstitutionId int    `json:"institution_id"`
+	Username      string `json:"username"`
+	Password      int    `json:"password"`
+}
+
 func (h *userHandler) AuthTokenToAccessToken(c *gin.Context) {
 	currentUser := c.MustGet("currentUser").(user.User)
-	fmt.Println(currentUser)
 
-	if currentUser.UserName == "rifanganteng" {
-		var respGetInstList interface{}
+	var input user.RequestAPIV1AUTH
 
-		// publicToken := d.Data.AccessToken
-		// fmt.Println(publicToken)
-		// var jsonStr = []byte(`
-		// 	{
-		// 		"institution_id" : 2,
-		// 		"username" : "AMMADRIF0122",
-		// 		"password": 252354
-		// 	}
-		// `)
-
-		clientGetInstList := http.Client{}
-		reqGetInstList, err := http.NewRequest("POST", "https://api.onebrick.io/v1/auth", c.Request.Body)
-		if err != nil {
-			//Handle Error
-		}
-
-		reqGetInstList.Header = http.Header{
-			"Content-Type":  {"application/json"},
-			"Authorization": {"Bearer public-production-ad98df55-fa5a-4664-8049-a5bfe4224887"},
-		}
-
-		resGetInstList, err := clientGetInstList.Do(reqGetInstList)
-		fmt.Println(resGetInstList)
-
-		defer resGetInstList.Body.Close()
-
-		err = json.NewDecoder(resGetInstList.Body).Decode(&respGetInstList)
-
-		c.JSON(200, respGetInstList)
+	err := c.ShouldBindJSON(&input)
+	if err != nil {
+		return
+	}
+	response, err := h.userService.AuthTokenToAccessToken(input, currentUser)
+	if err != nil {
+		response := helper.APIResponse("Auth Bank Error Occured", http.StatusBadRequest, "error", nil)
+		c.JSON(http.StatusBadRequest, response)
+		return
 	}
 
+	c.JSON(200, response)
 }
 
 type DataSession struct {
@@ -295,45 +283,20 @@ type Data struct {
 
 func (h *userHandler) AuthTokenToAccessTokenGopay(c *gin.Context) {
 	currentUser := c.MustGet("currentUser").(user.User)
-	fmt.Println(currentUser)
+	var input user.RequestAPIV1AUTH
 
-	if currentUser.UserName == "rifanganteng" {
-		var respDataSession DataSession
-		var respDataSessionError interface{}
-
-		clientGetInstList := http.Client{}
-		reqGetInstList, err := http.NewRequest("POST", "https://api.onebrick.io/v1/auth", c.Request.Body)
-		if err != nil {
-			//Handle Error
-		}
-
-		reqGetInstList.Header = http.Header{
-			"Content-Type":  {"application/json"},
-			"Authorization": {"Bearer public-production-ad98df55-fa5a-4664-8049-a5bfe4224887"},
-		}
-
-		resGetInstList, err := clientGetInstList.Do(reqGetInstList)
-
-		defer resGetInstList.Body.Close()
-
-		if resGetInstList.StatusCode == 500 {
-			err = json.NewDecoder(resGetInstList.Body).Decode(&respDataSessionError)
-		}
-		err = json.NewDecoder(resGetInstList.Body).Decode(&respDataSession)
-
-		fmt.Println("testing : ", resGetInstList.StatusCode)
-		fmt.Println("testing 2 : ", respDataSessionError)
-
-		sessionToken, err := h.userService.SaveGopayData(user.DataSession(respDataSession.Data))
-		fmt.Println(sessionToken)
-		fmt.Println(respDataSession)
-		if resGetInstList.StatusCode == 500 {
-			c.JSON(200, respDataSessionError)
-		} else {
-			c.JSON(200, respDataSession)
-		}
-
+	err := c.ShouldBindJSON(&input)
+	if err != nil {
+		return
 	}
+	response, err := h.userService.AuthTokenToAccessTokenGopay(input, currentUser)
+	if err != nil {
+		response := helper.APIResponse("Auth Bank Error Occured", http.StatusBadRequest, "error", nil)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	c.JSON(200, response)
 
 }
 
@@ -345,53 +308,208 @@ func (h *userHandler) OTPSessionToToken(c *gin.Context) {
 
 	c.ShouldBindJSON(&input)
 
-	if currentUser.UserName == "rifanganteng" {
-		var respDataSessionError interface{}
-		var respGetInstList interface{}
-
-		sessionToken, _ := h.userService.FindOtpSession(input)
-		fmt.Println(sessionToken)
-		var sessPayload user.SessionPayload
-
-		sessPayload.Username = sessionToken.Username
-		sessPayload.UniqueID = sessionToken.UniqueID
-		sessPayload.SessionID = sessionToken.SessionID
-		sessPayload.OtpToken = sessionToken.OtpToken
-		sessPayload.Otp = input.OTP
-		fmt.Println(sessPayload)
-		// data := url.Values{}
-		// data.Set("username", sessionToken.Username)
-		// data.Set("uniqueId", sessionToken.UniqueID)
-		// data.Set("sessionId", sessionToken.SessionID)
-		// data.Set("otpToken", sessionToken.OtpToken)
-		// data.Set("otp", input.OTP)
-		personJSON, err := json.Marshal(sessPayload)
-
-		clientGetInstList := http.Client{}
-		reqGetInstList, err := http.NewRequest("POST", "https://api.onebrick.io/v1/auth/gopay", bytes.NewBuffer(personJSON))
-		if err != nil {
-			//Handle Error
-		}
-
-		reqGetInstList.Header = http.Header{
-			"Content-Type":  {"application/json"},
-			"Authorization": {"Bearer public-production-ad98df55-fa5a-4664-8049-a5bfe4224887"},
-		}
-		resGetInstList, err := clientGetInstList.Do(reqGetInstList)
-		if resGetInstList.StatusCode != 200 {
-			err = json.NewDecoder(resGetInstList.Body).Decode(&respDataSessionError)
-		} else {
-			err = json.NewDecoder(resGetInstList.Body).Decode(&respGetInstList)
-		}
-		fmt.Println(resGetInstList)
-
-		defer resGetInstList.Body.Close()
-		if resGetInstList.StatusCode != 200 {
-			c.JSON(400, respDataSessionError)
-		} else {
-			c.JSON(200, respGetInstList)
-		}
-
+	response, err := h.userService.OTPSessionToToken(input, currentUser)
+	if err != nil {
+		response := helper.APIResponse("Auth Bank Error Occured", http.StatusBadRequest, "error", nil)
+		c.JSON(http.StatusBadRequest, response)
+		return
 	}
 
+	c.JSON(200, response)
+
 }
+
+func (h *userHandler) AccountListTransactions(c *gin.Context) {
+	currentUser := c.MustGet("currentUser").(user.User)
+	fmt.Println(currentUser)
+
+	// startDate := context.Param("start")
+	// endDate := context.Param("end")
+
+	accessTokens, err := h.userService.GetAccessTokensPerUser(currentUser)
+
+	mergedAccountListAndTransactions, err := h.userService.GetAccountListTransactions(currentUser, accessTokens)
+
+	fmt.Println(accessTokens)
+
+	if err != nil {
+		response := helper.APIResponse("Get Account List Transactions Error Occured", http.StatusBadRequest, "error", nil)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+
+	c.JSON(200, mergedAccountListAndTransactions)
+
+}
+
+// func (h *userHandler) AuthTokenToAccessToken(c *gin.Context) {
+// 	currentUser := c.MustGet("currentUser").(user.User)
+// 	fmt.Println(currentUser)
+// 	var brickAuthResponse brickAuthEntity.BrickAuthResponse
+// 	var dataToAccessTokenToBeSaved user.AccessToken
+// 	var requestHandler user.RequestAPIV1AUTH
+// 	if err := c.BindJSON(&requestHandler); err != nil {
+// 		panic(err)
+// 	}
+// 	if currentUser.UserName == "rifanganteng" {
+// 		// var respGetInstList interface{}
+
+// 		// publicToken := d.Data.AccessToken
+// 		// fmt.Println(publicToken)
+// 		// var jsonStr = []byte(`
+// 		// 	{
+// 		// 		"institution_id" : 2,
+// 		// 		"username" : "AMMADRIF0122",
+// 		// 		"password": 252354
+// 		// 	}
+// 		// `)
+
+// 		clientGetInstList := http.Client{}
+// 		reqGetAccessToken, err := http.NewRequest("POST", "https://api.onebrick.io/v1/auth", c.Request.Body)
+// 		if err != nil {
+// 			//Handle Error
+// 		}
+
+// 		reqGetAccessToken.Header = http.Header{
+// 			"Content-Type":  {"application/json"},
+// 			"Authorization": {"Bearer public-production-ad98df55-fa5a-4664-8049-a5bfe4224887"},
+// 		}
+
+// 		resGetAccessToken, err := clientGetInstList.Do(reqGetAccessToken)
+// 		if err != nil {
+// 			fmt.Println(err.Error())
+// 			return
+// 		}
+
+// 		fmt.Println(resGetAccessToken)
+
+// 		defer resGetAccessToken.Body.Close()
+
+// 		var testingDebug interface{}
+// 		json.NewDecoder(resGetAccessToken.Body).Decode(&testingDebug)
+// 		// if err != nil {
+// 		// 	panic(err)
+// 		// 	c.JSON(500, brickAuthResponse)
+// 		// }
+// 		fmt.Println(testingDebug)
+// 		fmt.Println(resGetAccessToken.StatusCode)
+// 		dataToAccessTokenToBeSaved.AccessToken = brickAuthResponse.Data
+// 		dataToAccessTokenToBeSaved.InstitutionID = requestHandler.InstitutionId
+// 		dataToAccessTokenToBeSaved.UserEmail = currentUser.Email
+// 		dataToAccessTokenToBeSaved.UserID = currentUser.UUID
+// 		fmt.Println("this is dataToAccessTokenToBeSaved  : ", dataToAccessTokenToBeSaved)
+// 		// if resGetAccessToken.StatusCode == 200 {
+
+// 		// }
+
+// 		c.JSON(200, brickAuthResponse)
+// 	}
+
+// }
+
+//backup
+
+// func (h *userHandler) AuthTokenToAccessTokenGopay(c *gin.Context) {
+// 	currentUser := c.MustGet("currentUser").(user.User)
+// 	fmt.Println(currentUser)
+
+// 	if currentUser.UserName == "rifanganteng" {
+// 		var respDataSession DataSession
+// 		var respDataSessionError interface{}
+
+// 		clientGetInstList := http.Client{}
+// 		reqGetInstList, err := http.NewRequest("POST", "https://api.onebrick.io/v1/auth", c.Request.Body)
+// 		if err != nil {
+// 			//Handle Error
+// 		}
+
+// 		reqGetInstList.Header = http.Header{
+// 			"Content-Type":  {"application/json"},
+// 			"Authorization": {"Bearer public-production-ad98df55-fa5a-4664-8049-a5bfe4224887"},
+// 		}
+
+// 		resGetInstList, err := clientGetInstList.Do(reqGetInstList)
+
+// 		defer resGetInstList.Body.Close()
+
+// 		if resGetInstList.StatusCode == 500 {
+// 			err = json.NewDecoder(resGetInstList.Body).Decode(&respDataSessionError)
+// 		}
+// 		err = json.NewDecoder(resGetInstList.Body).Decode(&respDataSession)
+
+// 		fmt.Println("testing : ", resGetInstList.StatusCode)
+// 		fmt.Println("testing 2 : ", respDataSessionError)
+
+// 		sessionToken, err := h.userService.SaveGopayData(user.DataSession(respDataSession.Data))
+// 		fmt.Println(sessionToken)
+// 		fmt.Println(respDataSession)
+// 		if resGetInstList.StatusCode == 500 {
+// 			c.JSON(200, respDataSessionError)
+// 		} else {
+// 			c.JSON(200, respDataSession)
+// 		}
+
+// 	}
+
+// }
+
+// BACKUP :
+
+// func (h *userHandler) OTPSessionToToken(c *gin.Context) {
+// 	currentUser := c.MustGet("currentUser").(user.User)
+// 	fmt.Println(currentUser)
+
+// 	var input user.PayloadOTP
+
+// 	c.ShouldBindJSON(&input)
+
+// 	if currentUser.UserName == "rifanganteng" {
+// 		var respDataSessionError interface{}
+// 		var respGetInstList interface{}
+
+// 		sessionToken, _ := h.userService.FindOtpSession(input)
+// 		fmt.Println(sessionToken)
+// 		var sessPayload user.SessionPayload
+
+// 		sessPayload.Username = sessionToken.Username
+// 		sessPayload.UniqueID = sessionToken.UniqueID
+// 		sessPayload.SessionID = sessionToken.SessionID
+// 		sessPayload.OtpToken = sessionToken.OtpToken
+// 		sessPayload.Otp = input.OTP
+// 		fmt.Println(sessPayload)
+// 		// data := url.Values{}
+// 		// data.Set("username", sessionToken.Username)
+// 		// data.Set("uniqueId", sessionToken.UniqueID)
+// 		// data.Set("sessionId", sessionToken.SessionID)
+// 		// data.Set("otpToken", sessionToken.OtpToken)
+// 		// data.Set("otp", input.OTP)
+// 		personJSON, err := json.Marshal(sessPayload)
+
+// 		clientGetInstList := http.Client{}
+// 		reqGetInstList, err := http.NewRequest("POST", "https://api.onebrick.io/v1/auth/gopay", bytes.NewBuffer(personJSON))
+// 		if err != nil {
+// 			//Handle Error
+// 		}
+
+// 		reqGetInstList.Header = http.Header{
+// 			"Content-Type":  {"application/json"},
+// 			"Authorization": {"Bearer public-production-ad98df55-fa5a-4664-8049-a5bfe4224887"},
+// 		}
+// 		resGetInstList, err := clientGetInstList.Do(reqGetInstList)
+// 		if resGetInstList.StatusCode != 200 {
+// 			err = json.NewDecoder(resGetInstList.Body).Decode(&respDataSessionError)
+// 		} else {
+// 			err = json.NewDecoder(resGetInstList.Body).Decode(&respGetInstList)
+// 		}
+// 		fmt.Println(resGetInstList)
+
+// 		defer resGetInstList.Body.Close()
+// 		if resGetInstList.StatusCode != 200 {
+// 			c.JSON(400, respDataSessionError)
+// 		} else {
+// 			c.JSON(200, respGetInstList)
+// 		}
+
+// 	}
+
+// }

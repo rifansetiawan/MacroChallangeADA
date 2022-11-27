@@ -1,0 +1,383 @@
+{
+    "status": 200,
+    "message": "OK",
+    "lastUpdateAt": "2022-11-15 20:33 GMT+0700",
+    "session": "valid",
+    "data": [
+        {
+            "accountId": "553790398",
+            "accountHolder": "Widi",
+            "accountNumber": "+6281265119189",
+            "balances": {
+                "available": 188967.0,
+                "current": 188967.0,
+                "limit": null
+            },
+            "currency": "IDR",
+            "type": "Wallet",
+            "institutionID" : 12,
+            "transactions" : [
+                {
+                    "dateTimestamp": "2022-10-18T17:00:00.000+00:00",
+                    "id": 0,
+                    "account_id": "553790398",
+                    "account_number": "553790398",
+                    "account_currency": "IDR",
+                    "institution_id": 11,
+                    "merchant_id": 0,
+                    "outlet_outlet_id": 0,
+                    "location_city_id": 0,
+                    "location_country_id": 0,
+                    "date": "2022-10-19",
+                    "amount": 137000.0,
+                    "description": "GO-FOOD\nMcDonald&#39;s, SM Raja Medan #F-1885037710",
+                    "status": "CONFIRMED",
+                    "direction": "out",
+                    "reference_id": "553790398-20221019-1",
+                    "category": {
+                        "category_id": 6,
+                        "category_name": "purchase",
+                        "classification_group_id": 13,
+                        "classification_group": "food & dining",
+                        "classification_subgroup_id": 96,
+                        "classification_subgroup": "restaurants"
+                    },
+                    "transaction_type": "Wallet"
+                },
+                {
+                    "dateTimestamp": "2022-10-18T17:00:00.000+00:00",
+                    "id": 0,
+                    "account_id": "553790398",
+                    "account_number": "553790398",
+                    "account_currency": "IDR",
+                    "institution_id": 11,
+                    "merchant_id": 0,
+                    "outlet_outlet_id": 0,
+                    "location_city_id": 0,
+                    "location_country_id": 0,
+                    "date": "2022-10-19",
+                    "amount": 300000.0,
+                    "description": "GoPay Topup\n#22101992016050473972",
+                    "status": "CONFIRMED",
+                    "direction": "in",
+                    "reference_id": "553790398-20221019-2",
+                    "category": {
+                        "category_id": 5,
+                        "category_name": "transfer-in",
+                        "classification_group_id": 7,
+                        "classification_group": "deposit",
+                        "classification_subgroup_id": 65,
+                        "classification_subgroup": "top-up"
+                    },
+                    "transaction_type": "Wallet"
+                },
+                {
+                    "dateTimestamp": "2022-11-11T17:00:00.000+00:00",
+                    "id": 0,
+                    "account_id": "553790398",
+                    "account_number": "553790398",
+                    "account_currency": "IDR",
+                    "institution_id": 11,
+                    "merchant_id": 0,
+                    "outlet_outlet_id": 0,
+                    "location_city_id": 0,
+                    "location_country_id": 0,
+                    "date": "2022-11-12",
+                    "amount": 5000.0,
+                    "description": "GoPay Voucher Cashback Lotte Mart - Medan Center Point voucher#ejEIt4FmV0NzEC9QvCyS order#QXX5ID",
+                    "status": "CONFIRMED",
+                    "direction": "in",
+                    "reference_id": "553790398-20221112-1",
+                    "category": {
+                        "category_id": 5,
+                        "category_name": "transfer-in",
+                        "classification_group_id": 7,
+                        "classification_group": "deposit",
+                        "classification_subgroup_id": 74,
+                        "classification_subgroup": "cashback & rewards"
+                    },
+                    "transaction_type": "Wallet"
+                },
+                {
+                    "dateTimestamp": "2022-11-11T17:00:00.000+00:00",
+                    "id": 0,
+                    "account_id": "553790398",
+                    "account_number": "553790398",
+                    "account_currency": "IDR",
+                    "institution_id": 11,
+                    "merchant_id": 0,
+                    "outlet_outlet_id": 0,
+                    "location_city_id": 0,
+                    "location_country_id": 0,
+                    "date": "2022-11-12",
+                    "amount": 48200.0,
+                    "description": "GO-PAY Payment\n#Lotte Mart - Medan Center Point #6fee03d6-b26d-4dd4-bc44-3096b62a5d3e\n#0220221112130029aS1VXUQXX5ID",
+                    "status": "CONFIRMED",
+                    "direction": "out",
+                    "reference_id": "553790398-20221112-2",
+                    "category": {
+                        "category_id": 6,
+                        "category_name": "purchase",
+                        "classification_group_id": 10,
+                        "classification_group": "shopping",
+                        "classification_subgroup_id": 54,
+                        "classification_subgroup": "groceries"
+                    },
+                    "transaction_type": "Wallet"
+                }
+            ]
+        },
+        {
+            "accountId": "553790398",
+            "accountHolder": "Widi",
+            "accountNumber": "+6281265119189",
+            "balances": {
+                "available": 188967.0,
+                "current": 188967.0,
+                "limit": null
+            },
+            "currency": "IDR",
+            "type": "Wallet",
+            "institutionID" : 12,
+            "transactions" : [
+                {
+                    "dateTimestamp": "2022-10-18T17:00:00.000+00:00",
+                    "id": 0,
+                    "account_id": "553790398",
+                    "account_number": "553790398",
+                    "account_currency": "IDR",
+                    "institution_id": 11,
+                    "merchant_id": 0,
+                    "outlet_outlet_id": 0,
+                    "location_city_id": 0,
+                    "location_country_id": 0,
+                    "date": "2022-10-19",
+                    "amount": 137000.0,
+                    "description": "GO-FOOD\nMcDonald&#39;s, SM Raja Medan #F-1885037710",
+                    "status": "CONFIRMED",
+                    "direction": "out",
+                    "reference_id": "553790398-20221019-1",
+                    "category": {
+                        "category_id": 6,
+                        "category_name": "purchase",
+                        "classification_group_id": 13,
+                        "classification_group": "food & dining",
+                        "classification_subgroup_id": 96,
+                        "classification_subgroup": "restaurants"
+                    },
+                    "transaction_type": "Wallet"
+                },
+                {
+                    "dateTimestamp": "2022-10-18T17:00:00.000+00:00",
+                    "id": 0,
+                    "account_id": "553790398",
+                    "account_number": "553790398",
+                    "account_currency": "IDR",
+                    "institution_id": 11,
+                    "merchant_id": 0,
+                    "outlet_outlet_id": 0,
+                    "location_city_id": 0,
+                    "location_country_id": 0,
+                    "date": "2022-10-19",
+                    "amount": 300000.0,
+                    "description": "GoPay Topup\n#22101992016050473972",
+                    "status": "CONFIRMED",
+                    "direction": "in",
+                    "reference_id": "553790398-20221019-2",
+                    "category": {
+                        "category_id": 5,
+                        "category_name": "transfer-in",
+                        "classification_group_id": 7,
+                        "classification_group": "deposit",
+                        "classification_subgroup_id": 65,
+                        "classification_subgroup": "top-up"
+                    },
+                    "transaction_type": "Wallet"
+                },
+                {
+                    "dateTimestamp": "2022-11-11T17:00:00.000+00:00",
+                    "id": 0,
+                    "account_id": "553790398",
+                    "account_number": "553790398",
+                    "account_currency": "IDR",
+                    "institution_id": 11,
+                    "merchant_id": 0,
+                    "outlet_outlet_id": 0,
+                    "location_city_id": 0,
+                    "location_country_id": 0,
+                    "date": "2022-11-12",
+                    "amount": 5000.0,
+                    "description": "GoPay Voucher Cashback Lotte Mart - Medan Center Point voucher#ejEIt4FmV0NzEC9QvCyS order#QXX5ID",
+                    "status": "CONFIRMED",
+                    "direction": "in",
+                    "reference_id": "553790398-20221112-1",
+                    "category": {
+                        "category_id": 5,
+                        "category_name": "transfer-in",
+                        "classification_group_id": 7,
+                        "classification_group": "deposit",
+                        "classification_subgroup_id": 74,
+                        "classification_subgroup": "cashback & rewards"
+                    },
+                    "transaction_type": "Wallet"
+                },
+                {
+                    "dateTimestamp": "2022-11-11T17:00:00.000+00:00",
+                    "id": 0,
+                    "account_id": "553790398",
+                    "account_number": "553790398",
+                    "account_currency": "IDR",
+                    "institution_id": 11,
+                    "merchant_id": 0,
+                    "outlet_outlet_id": 0,
+                    "location_city_id": 0,
+                    "location_country_id": 0,
+                    "date": "2022-11-12",
+                    "amount": 48200.0,
+                    "description": "GO-PAY Payment\n#Lotte Mart - Medan Center Point #6fee03d6-b26d-4dd4-bc44-3096b62a5d3e\n#0220221112130029aS1VXUQXX5ID",
+                    "status": "CONFIRMED",
+                    "direction": "out",
+                    "reference_id": "553790398-20221112-2",
+                    "category": {
+                        "category_id": 6,
+                        "category_name": "purchase",
+                        "classification_group_id": 10,
+                        "classification_group": "shopping",
+                        "classification_subgroup_id": 54,
+                        "classification_subgroup": "groceries"
+                    },
+                    "transaction_type": "Wallet"
+                }
+            ]
+        },
+        {
+            "accountId": "553790398",
+            "accountHolder": "Widi",
+            "accountNumber": "+6281265119189",
+            "balances": {
+                "available": 188967.0,
+                "current": 188967.0,
+                "limit": null
+            },
+            "currency": "IDR",
+            "type": "Wallet",
+            "institutionID" : 12,
+            "transactions" : [
+                {
+                    "dateTimestamp": "2022-10-18T17:00:00.000+00:00",
+                    "id": 0,
+                    "account_id": "553790398",
+                    "account_number": "553790398",
+                    "account_currency": "IDR",
+                    "institution_id": 11,
+                    "merchant_id": 0,
+                    "outlet_outlet_id": 0,
+                    "location_city_id": 0,
+                    "location_country_id": 0,
+                    "date": "2022-10-19",
+                    "amount": 137000.0,
+                    "description": "GO-FOOD\nMcDonald&#39;s, SM Raja Medan #F-1885037710",
+                    "status": "CONFIRMED",
+                    "direction": "out",
+                    "reference_id": "553790398-20221019-1",
+                    "category": {
+                        "category_id": 6,
+                        "category_name": "purchase",
+                        "classification_group_id": 13,
+                        "classification_group": "food & dining",
+                        "classification_subgroup_id": 96,
+                        "classification_subgroup": "restaurants"
+                    },
+                    "transaction_type": "Wallet"
+                },
+                {
+                    "dateTimestamp": "2022-10-18T17:00:00.000+00:00",
+                    "id": 0,
+                    "account_id": "553790398",
+                    "account_number": "553790398",
+                    "account_currency": "IDR",
+                    "institution_id": 11,
+                    "merchant_id": 0,
+                    "outlet_outlet_id": 0,
+                    "location_city_id": 0,
+                    "location_country_id": 0,
+                    "date": "2022-10-19",
+                    "amount": 300000.0,
+                    "description": "GoPay Topup\n#22101992016050473972",
+                    "status": "CONFIRMED",
+                    "direction": "in",
+                    "reference_id": "553790398-20221019-2",
+                    "category": {
+                        "category_id": 5,
+                        "category_name": "transfer-in",
+                        "classification_group_id": 7,
+                        "classification_group": "deposit",
+                        "classification_subgroup_id": 65,
+                        "classification_subgroup": "top-up"
+                    },
+                    "transaction_type": "Wallet"
+                },
+                {
+                    "dateTimestamp": "2022-11-11T17:00:00.000+00:00",
+                    "id": 0,
+                    "account_id": "553790398",
+                    "account_number": "553790398",
+                    "account_currency": "IDR",
+                    "institution_id": 11,
+                    "merchant_id": 0,
+                    "outlet_outlet_id": 0,
+                    "location_city_id": 0,
+                    "location_country_id": 0,
+                    "date": "2022-11-12",
+                    "amount": 5000.0,
+                    "description": "GoPay Voucher Cashback Lotte Mart - Medan Center Point voucher#ejEIt4FmV0NzEC9QvCyS order#QXX5ID",
+                    "status": "CONFIRMED",
+                    "direction": "in",
+                    "reference_id": "553790398-20221112-1",
+                    "category": {
+                        "category_id": 5,
+                        "category_name": "transfer-in",
+                        "classification_group_id": 7,
+                        "classification_group": "deposit",
+                        "classification_subgroup_id": 74,
+                        "classification_subgroup": "cashback & rewards"
+                    },
+                    "transaction_type": "Wallet"
+                },
+                {
+                    "dateTimestamp": "2022-11-11T17:00:00.000+00:00",
+                    "id": 0,
+                    "account_id": "553790398",
+                    "account_number": "553790398",
+                    "account_currency": "IDR",
+                    "institution_id": 11,
+                    "merchant_id": 0,
+                    "outlet_outlet_id": 0,
+                    "location_city_id": 0,
+                    "location_country_id": 0,
+                    "date": "2022-11-12",
+                    "amount": 48200.0,
+                    "description": "GO-PAY Payment\n#Lotte Mart - Medan Center Point #6fee03d6-b26d-4dd4-bc44-3096b62a5d3e\n#0220221112130029aS1VXUQXX5ID",
+                    "status": "CONFIRMED",
+                    "direction": "out",
+                    "reference_id": "553790398-20221112-2",
+                    "category": {
+                        "category_id": 6,
+                        "category_name": "purchase",
+                        "classification_group_id": 10,
+                        "classification_group": "shopping",
+                        "classification_subgroup_id": 54,
+                        "classification_subgroup": "groceries"
+                    },
+                    "transaction_type": "Wallet"
+                }
+            ]
+        }
+    ],
+    "errorData" : [
+        {
+            "institutionID" : 12,
+
+        }
+    ]
+}

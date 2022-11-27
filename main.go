@@ -48,14 +48,24 @@ func main() {
 
 	api := router.Group("/api/v1")
 
+	//Users Route
 	api.POST("/register-user", userHandler.RegisterUser)
 	api.POST("/sessions", userHandler.Login)
 	api.POST("/email_checkers", userHandler.CheckEmailAvailability)
 	api.POST("/avatars", authMiddleware(authService, userService), userHandler.UploadAvatar)
+
+	//Auth to get public token
 	api.GET("/auth/token", authMiddleware(authService, userService), userHandler.AuthToken)
+
+	//Auth to connect Bank Account or any other financials account
 	api.POST("/auth", authMiddleware(authService, userService), userHandler.AuthTokenToAccessToken)
+
+	//Auth to connect Gojek
 	api.POST("/auth/gopay", authMiddleware(authService, userService), userHandler.AuthTokenToAccessTokenGopay)
 	api.POST("/auth/gopay/token", authMiddleware(authService, userService), userHandler.OTPSessionToToken)
+
+	//Account List
+	api.GET("/account/list/:start/:end", authMiddleware(authService, userService), userHandler.AccountListTransactions)
 
 	api.GET("/users/fetch", authMiddleware(authService, userService), userHandler.FetchUser)
 

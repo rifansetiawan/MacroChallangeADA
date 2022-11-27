@@ -9,7 +9,10 @@ type Repository interface {
 	Update(user User) (User, error)
 	FindAll() ([]User, error)
 	SaveSession(session Session) (Session, error)
+	DeletePrevSession(phoneNumber string)
 	FindOtpNumber(phoneNumber string) (Session, error)
+	SaveAccessToken(access_tokens AccessToken) (AccessToken, error)
+	GetAccessTokensPerUser(currentUser User) ([]AccessToken, error)
 }
 
 type repository struct {
@@ -36,6 +39,18 @@ func (r *repository) SaveSession(session Session) (Session, error) {
 	}
 
 	return session, nil
+}
+func (r *repository) DeletePrevSession(phoneNumber string) {
+	r.db.Delete(&Session{}, "username LIKE ?", "%"+phoneNumber+"%")
+}
+
+func (r *repository) SaveAccessToken(access_tokens AccessToken) (AccessToken, error) {
+	err := r.db.Create(&access_tokens).Error
+	if err != nil {
+		return access_tokens, err
+	}
+
+	return access_tokens, nil
 }
 
 func (r *repository) FindOtpNumber(phoneNumber string) (Session, error) {
@@ -90,4 +105,14 @@ func (r *repository) FindAll() ([]User, error) {
 	}
 
 	return users, nil
+}
+func (r *repository) GetAccessTokensPerUser(currenUser User) ([]AccessToken, error) {
+	var access_tokens []AccessToken
+
+	err := r.db.Where("user_email = ?", currenUser.Email).Find(&access_tokens).Error
+	if err != nil {
+		return access_tokens, err
+	}
+
+	return access_tokens, nil
 }

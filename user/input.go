@@ -24,8 +24,9 @@ type CheckEmailInput struct {
 }
 
 type PayloadOTP struct {
-	Username string `json:"username" binding:"required"`
-	OTP      int    `json:"otp" binding:"required"`
+	Username      string `json:"username" binding:"required"`
+	InstitutionID int    `json:"institution_id" binding:"required"`
+	OTP           int    `json:"otp" binding:"required"`
 }
 
 type FormCreateUserInput struct {
@@ -43,4 +44,23 @@ type FormUpdateUserInput struct {
 	Email      string `form:"email" binding:"required,email"`
 	Occupation string `form:"occupation" binding:"required"`
 	Error      error
+}
+
+type AccessToken struct {
+	UserID        string `json:"user_id"`
+	UserName      string `json:"user_name"`
+	UserEmail     string `json:"user_email"`
+	InstitutionID int    `json:"institution_id"`
+	AccessToken   string `json:"access_token"`
+}
+
+type RequestAPIV1AUTH struct {
+	InstitutionId int    `json:"institution_id"`
+	Username      string `json:"username"`
+	Password      int    `json:"password"`
+}
+
+type RequestGopayOTP struct {
+	OTP      int    `json:"otp"`
+	Username string `json:"username"`
 }
