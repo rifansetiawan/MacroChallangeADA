@@ -28,7 +28,7 @@ type Service interface {
 	OTPSessionToToken(input PayloadOTP, currentUser User) (interface{}, error)
 	// GetAccountListTransactions(currentUser User) ([]string, error)
 	GetAccessTokensPerUser(currentUser User) ([]AccessToken, error)
-	GetAccountListTransactions(currentUser User, accessTokens []AccessToken) (interface{}, error)
+	GetAccountListTransactions(currentUser User, accessTokens []AccessToken, startDate string, endDate string) (interface{}, error)
 
 	// SaveAccessToken(userDetailandAccessToekn AccessToken) (AccessToken, error)
 }
@@ -343,7 +343,7 @@ func (s *service) GetAccessTokensPerUser(currentUser User) ([]AccessToken, error
 	return accessTokens, nil
 }
 
-func (s *service) GetAccountListTransactions(currentUser User, accessTokens []AccessToken) (interface{}, error) {
+func (s *service) GetAccountListTransactions(currentUser User, accessTokens []AccessToken, startDate string, endDate string) (interface{}, error) {
 	var arrayAccuntListTransactionSuccess []AccountListTransactionResponsePerAccessToken
 	var arrayErrorResponseAccountListTransaction []ErrorResponseAccountListTransaction
 	var mergedAccountListTransaction MergedAccountListTransaction
@@ -385,7 +385,7 @@ func (s *service) GetAccountListTransactions(currentUser User, accessTokens []Ac
 				if responseAccountLooping.Type != "PayLater" {
 					responseAccountLooping.InstitutionID = oneAccessToken.InstitutionID
 
-					transactions, _ := s.GetTransactionsOnly(oneAccessToken)
+					transactions, _ := s.GetTransactionsOnly(oneAccessToken, startDate, endDate)
 					fmt.Println("ini transactionsssss : ", transactions.Data)
 					responseAccountLooping.Transactions = transactions.Data
 					mergedAccountListTransaction.Data = append(mergedAccountListTransaction.Data, responseAccountLooping)
@@ -411,11 +411,11 @@ func (s *service) GetAccountListTransactions(currentUser User, accessTokens []Ac
 	return mergedAccountListTransaction, nil
 }
 
-func (s *service) GetTransactionsOnly(oneAccessToken AccessToken) (ListTransactionFromTo, error) {
+func (s *service) GetTransactionsOnly(oneAccessToken AccessToken, startDate string, endDate string) (ListTransactionFromTo, error) {
 	var responseListTransactionMother ListTransactionFromTo
 
 	clientListTransactionsMother := http.Client{}
-	requestTransactionMother, err := http.NewRequest("GET", "https://api.onebrick.io/v1/transaction/list?from=2022-08-20&to=2022-11-25", nil)
+	requestTransactionMother, err := http.NewRequest("GET", fmt.Sprintf("https://api.onebrick.io/v1/transaction/list?from=%s&to=%s", startDate, endDate), nil)
 	if err != nil {
 		//Handle Error
 	}

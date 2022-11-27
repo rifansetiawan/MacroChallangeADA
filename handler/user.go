@@ -346,13 +346,18 @@ func (h *userHandler) OTPSessionToToken(c *gin.Context) {
 func (h *userHandler) AccountListTransactions(c *gin.Context) {
 	currentUser := c.MustGet("currentUser").(user.User)
 	fmt.Println(currentUser)
+	var startDateString string
+	var endDateString string
 
-	// startDate := context.Param("start")
-	// endDate := context.Param("end")
+	startDate := c.Param("start")
+	endDate := c.Param("end")
+
+	startDateString = startDate
+	endDateString = endDate
 
 	accessTokens, err := h.userService.GetAccessTokensPerUser(currentUser)
 
-	mergedAccountListAndTransactions, err := h.userService.GetAccountListTransactions(currentUser, accessTokens)
+	mergedAccountListAndTransactions, err := h.userService.GetAccountListTransactions(currentUser, accessTokens, startDateString, endDateString)
 
 	fmt.Println(accessTokens)
 
