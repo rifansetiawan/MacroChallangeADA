@@ -218,6 +218,30 @@ func (h *userHandler) AuthToken(c *gin.Context) {
 		err = json.NewDecoder(resGetInstList.Body).Decode(&respGetInstList)
 
 		c.JSON(200, respGetInstList)
+	} else {
+		var respGetInstList interface{}
+
+		// publicToken := d.Data.AccessToken
+		// fmt.Println(publicToken)
+
+		clientGetInstList := http.Client{}
+		reqGetInstList, err := http.NewRequest("GET", "https://api.onebrick.io/v1/institution/list", nil)
+		if err != nil {
+			//Handle Error
+		}
+
+		reqGetInstList.Header = http.Header{
+			"Content-Type":  {"application/json"},
+			"Authorization": {"Bearer public-production-ad98df55-fa5a-4664-8049-a5bfe4224887 "},
+		}
+
+		resGetInstList, err := clientGetInstList.Do(reqGetInstList)
+
+		defer resGetInstList.Body.Close()
+
+		err = json.NewDecoder(resGetInstList.Body).Decode(&respGetInstList)
+
+		c.JSON(200, respGetInstList)
 	}
 	// var responsetoreturn [string]interface{}
 	// client := http.Client{}
