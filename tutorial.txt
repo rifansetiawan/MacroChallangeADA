@@ -1,0 +1,72 @@
+step :
+
+1. register 
+2. setelah register nanti dapet JWT nya (API login juga bisa), 
+   nah jwtnya untuk get Institution List, 
+   connect ke bank , connect ke gopay , input otp gopay , dan access transaction list , 
+
+API Register :
+
+curl --location --request POST 'http://135.148.157.241:3333/api/v1/register-user' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "user_name" : "rifanganteng123",
+    "email" : "rifanganteng123@gmail.com",
+    "password" : "123"
+}'
+
+
+API LOGIN :
+
+curl --location --request POST 'http://135.148.157.241:3333/api/v1/sessions' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "email" : "rifanganteng123@gmail.com",
+    "password" : "123"
+}'
+
+
+API GET INSTITUTION LIST :
+
+curl --location --request GET 'http://135.148.157.241:3333/api/v1/auth/token' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiZjU3OGY0NWQtZGE4ZC00M2I2LTk4OWQtNWUyZjUxMGMxZDBiIn0.NzPLAmIUNm39Eo7XyHmBeW0rZz6RX0cHw_istQ9o8_w'
+
+
+
+API AUTH BANK (harus pakai bank asli, karena production) :
+
+curl --location --request POST 'http://135.148.157.241:3333/api/v1/auth' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiZjU3OGY0NWQtZGE4ZC00M2I2LTk4OWQtNWUyZjUxMGMxZDBiIn0.NzPLAmIUNm39Eo7XyHmBeW0rZz6RX0cHw_istQ9o8_w' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "username" : "johndoe",
+    "password": "fintechFirst"
+}'
+
+
+API CONNECT GOPAY (1ST STEP):
+
+curl --location --request POST 'http://135.148.157.241:3333/api/v1/auth/gopay' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiZjU3OGY0NWQtZGE4ZC00M2I2LTk4OWQtNWUyZjUxMGMxZDBiIn0.NzPLAmIUNm39Eo7XyHmBeW0rZz6RX0cHw_istQ9o8_w' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "institution_id": 11,
+    "username": "+628995249354"
+}'
+
+API CONNECT GOPAY (2ND STEP):
+
+curl --location --request POST 'http://135.148.157.241:3333/api/v1/auth/gopay/token' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiZjU3OGY0NWQtZGE4ZC00M2I2LTk4OWQtNWUyZjUxMGMxZDBiIn0.NzPLAmIUNm39Eo7XyHmBeW0rZz6RX0cHw_istQ9o8_w' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "username": "+628995249354",
+    "otp" : 4984,
+    "institution_id" : 11
+}'
+
+
+API GET TRANSACTION LIST :
+
+curl --location --request GET 'http://135.148.157.241:3333/api/v1/account/list/2022-11-17/2022-11-25' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiZjU3OGY0NWQtZGE4ZC00M2I2LTk4OWQtNWUyZjUxMGMxZDBiIn0.NzPLAmIUNm39Eo7XyHmBeW0rZz6RX0cHw_istQ9o8_w'

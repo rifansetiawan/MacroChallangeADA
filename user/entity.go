@@ -87,10 +87,10 @@ type ListTransactionOnly struct {
 	LocationCounterId int      `json:"location_country_id"`
 	Date              string   `json:"date"`
 	Amount            float64  `json:"amount"`
-	Description       int      `json:"description"`
-	Status            int      `json:"status"`
-	Direction         int      `json:"direction"`
-	ReferenceId       int      `json:"reference_id"`
+	Description       string   `json:"description"`
+	Status            string   `json:"status"`
+	Direction         string   `json:"direction"`
+	ReferenceId       string   `json:"reference_id"`
 	Category          Category `json:"category"`
 	TransactionType   string   `json:"transaction_type"`
 }
