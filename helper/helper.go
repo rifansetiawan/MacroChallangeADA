@@ -43,7 +43,7 @@ func APIResponse(message string, code int, status string, data interface{}) Resp
 	return jsonResponse
 }
 
-func APIResponseCustom(message string, status int, data interface{}) Response {
+func APIResponseCustom(message string, status int, data interface{}) ResponseCustom {
 	// meta := Meta{
 	// 	Message: message,
 	// 	Code:    code,
