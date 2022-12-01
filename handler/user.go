@@ -329,7 +329,11 @@ func (h *userHandler) AuthTokenToAccessTokenGopay(c *gin.Context) {
 	// 	c.JSON(200, returnResponse)
 
 	// }
-	c.JSON(200, response)
+	if response.(map[string]interface{})["status"].(int) == 500 {
+		c.JSON(500, response)
+	} else {
+		c.JSON(200, response)
+	}
 
 }
 
