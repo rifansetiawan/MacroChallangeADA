@@ -13,7 +13,7 @@ type Repository interface {
 	FindOtpNumber(phoneNumber string) (Session, error)
 	SaveAccessToken(access_tokens AccessToken) (AccessToken, error)
 	GetAccessTokensPerUser(currentUser User) ([]AccessToken, error)
-	DeleteExistingAccessTokensPerUser(currentUser User, institutionId int) ([]AccessToken, error)
+	DeleteExistingAccessTokensPerUser(currentUser User, institutionId int) error
 }
 
 type repository struct {
