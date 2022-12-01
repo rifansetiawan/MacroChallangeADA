@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"strings"
 
 	brickAuthEntity "kaia/brick_auth"
 
@@ -168,7 +169,9 @@ func (s *service) OTPSessionToToken(input PayloadOTP, currentUser User) (brickAu
 	dataToAccessTokenToBeSaved.UserEmail = currentUser.Email
 	dataToAccessTokenToBeSaved.UserName = currentUser.UserName
 	dataToAccessTokenToBeSaved.UserID = currentUser.UUID
-	s.repository.SaveAccessToken(dataToAccessTokenToBeSaved)
+	if strings.HasPrefix(brickAuthResponse.Data, "access-") {
+		s.repository.SaveAccessToken(dataToAccessTokenToBeSaved)
+	}
 
 	fmt.Println("this is dataToAccessTokenToBeSaved : ", dataToAccessTokenToBeSaved)
 
