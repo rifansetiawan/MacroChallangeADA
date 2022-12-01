@@ -314,20 +314,22 @@ func (h *userHandler) AuthTokenToAccessTokenGopay(c *gin.Context) {
 		return
 	}
 	response, err := h.userService.AuthTokenToAccessTokenGopay(input, currentUser)
-	if err != nil {
-		response := helper.APIResponse("Auth Bank Error Occured", http.StatusBadRequest, "error", nil)
-		c.JSON(http.StatusBadRequest, response)
-		return
-	}
-	if response.(map[string]interface{})["error_code"] != nil {
-		response := helper.APIResponse("Auth Bank Error Occured", 500, "error", response)
-		c.JSON(http.StatusBadRequest, response)
-		return
-	}
+	// if err != nil {
+	// 	response := helper.APIResponse("Auth Bank Error Occured", http.StatusBadRequest, "error", nil)
+	// 	c.JSON(http.StatusBadRequest, response)
+	// 	return
+	// }
+	// if _, ok := response.(map[string]interface{})["error_code"]; ok {
+	// 	response := helper.APIResponse("Auth Bank Error Occured", 500, "error", response)
+	// 	c.JSON(http.StatusBadRequest, response)
+	// 	return
+	// } else if response.(user.Session).OtpToken != "nil" {
+	// 	returnResponse := helper.APIResponseCustom("OK", http.StatusOK, response)
 
-	returnResponse := helper.APIResponseCustom("OK", http.StatusOK, response)
+	// 	c.JSON(200, returnResponse)
 
-	c.JSON(200, returnResponse)
+	// }
+	c.JSON(200, response)
 
 }
 

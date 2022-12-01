@@ -106,10 +106,10 @@ func (s *service) AuthTokenToAccessTokenGopay(input RequestAPIV1AUTH, currentUse
 
 	defer resGetInstList.Body.Close()
 
-	if resGetInstList.StatusCode != 200 {
-		err = json.NewDecoder(resGetInstList.Body).Decode(&respDataSessionError)
-		return respDataSessionError, nil
-	}
+	// if resGetInstList.StatusCode != 200 {
+	// 	err = json.NewDecoder(resGetInstList.Body).Decode(&respDataSessionError)
+	// 	return respDataSessionError, nil
+	// }
 	err = json.NewDecoder(resGetInstList.Body).Decode(&respDataSession)
 
 	fmt.Println("testing : ", resGetInstList.StatusCode)
@@ -123,7 +123,7 @@ func (s *service) AuthTokenToAccessTokenGopay(input RequestAPIV1AUTH, currentUse
 	s.repository.DeletePrevSession(sessions.Username)
 	s.repository.SaveSession(sessions)
 
-	return sessions, nil
+	return respDataSession, nil
 }
 
 func (s *service) OTPSessionToToken(input PayloadOTP, currentUser User) (interface{}, error) {
