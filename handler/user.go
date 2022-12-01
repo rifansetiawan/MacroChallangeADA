@@ -319,6 +319,11 @@ func (h *userHandler) AuthTokenToAccessTokenGopay(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, response)
 		return
 	}
+	if response.(map[string]interface{})["error_code"] != nil {
+		response := helper.APIResponse("Auth Bank Error Occured", 500, "error", response)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
 
 	returnResponse := helper.APIResponseCustom("OK", http.StatusOK, response)
 
