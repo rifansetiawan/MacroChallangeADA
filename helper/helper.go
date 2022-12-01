@@ -11,6 +11,12 @@ type Response struct {
 	Data    interface{} `json:"data"`
 }
 
+type ResponseCustom struct {
+	Message string      `json:"message"`
+	Status  int         `json:"status"`
+	Data    interface{} `json:"data"`
+}
+
 type Meta struct {
 	Message string `json:"message"`
 	Code    int    `json:"code"`
@@ -30,6 +36,25 @@ func APIResponse(message string, code int, status string, data interface{}) Resp
 		// Data: data,
 		Message: message,
 		Code:    code,
+		Status:  status,
+		Data:    data,
+	}
+
+	return jsonResponse
+}
+
+func APIResponseCustom(message string, status int, data interface{}) Response {
+	// meta := Meta{
+	// 	Message: message,
+	// 	Code:    code,
+	// 	Status:  status,
+	// 	Data:    data,
+	// }
+
+	jsonResponse := ResponseCustom{
+		// Meta: meta,
+		// Data: data,
+		Message: message,
 		Status:  status,
 		Data:    data,
 	}
