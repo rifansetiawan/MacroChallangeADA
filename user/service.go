@@ -30,6 +30,7 @@ type Service interface {
 	// GetAccountListTransactions(currentUser User) ([]string, error)
 	GetAccessTokensPerUser(currentUser User) ([]AccessToken, error)
 	GetAccountListTransactions(currentUser User, accessTokens []AccessToken, startDate string, endDate string) (interface{}, error)
+	DeleteExistingAccessTokensPerUser(currentUser User, institution_id int)
 
 	// SaveAccessToken(userDetailandAccessToekn AccessToken) (AccessToken, error)
 }
@@ -170,6 +171,7 @@ func (s *service) OTPSessionToToken(input PayloadOTP, currentUser User) (brickAu
 	dataToAccessTokenToBeSaved.UserName = currentUser.UserName
 	dataToAccessTokenToBeSaved.UserID = currentUser.UUID
 	if strings.HasPrefix(brickAuthResponse.Data, "access-") {
+		s.DeleteExistingAccessTokensPerUser(currentUser, input.InstitutionID)
 		s.repository.SaveAccessToken(dataToAccessTokenToBeSaved)
 	}
 
@@ -344,6 +346,10 @@ func (s *service) GetAccessTokensPerUser(currentUser User) ([]AccessToken, error
 		return accessTokens, err
 	}
 	return accessTokens, nil
+}
+
+func (s *service) DeleteExistingAccessTokensPerUser(currentUser User, institutionID int) {
+	s.repository.DeleteExistingAccessTokensPerUser(currentUser, institutionID)
 }
 
 func (s *service) GetAccountListTransactions(currentUser User, accessTokens []AccessToken, startDate string, endDate string) (interface{}, error) {

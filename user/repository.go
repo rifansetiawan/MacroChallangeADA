@@ -13,6 +13,7 @@ type Repository interface {
 	FindOtpNumber(phoneNumber string) (Session, error)
 	SaveAccessToken(access_tokens AccessToken) (AccessToken, error)
 	GetAccessTokensPerUser(currentUser User) ([]AccessToken, error)
+	DeleteExistingAccessTokensPerUser(currentUser User, institutionId int) ([]AccessToken, error)
 }
 
 type repository struct {
@@ -115,4 +116,10 @@ func (r *repository) GetAccessTokensPerUser(currenUser User) ([]AccessToken, err
 	}
 
 	return access_tokens, nil
+}
+
+func (r *repository) DeleteExistingAccessTokensPerUser(currenUser User, institutionID int) error {
+	var access_token AccessToken
+	r.db.Where("user_email = ? AND institution_id = ?", currenUser.Email, institutionID).Delete(&access_token)
+	return nil
 }
