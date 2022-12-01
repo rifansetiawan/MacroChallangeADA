@@ -25,7 +25,7 @@ type Service interface {
 	FindOtpSession(input PayloadOTP) (Session, error)
 	AuthTokenToAccessToken(input RequestAPIV1AUTH, currentUser User) (interface{}, error)
 	AuthTokenToAccessTokenGopay(input RequestAPIV1AUTH, currentUser User) (brickAuthEntity.BrickAuthResponseGopay, error)
-	OTPSessionToToken(input PayloadOTP, currentUser User) (interface{}, error)
+	OTPSessionToToken(input PayloadOTP, currentUser User) (brickAuthEntity.BrickAuthResponse, error)
 	// GetAccountListTransactions(currentUser User) ([]string, error)
 	GetAccessTokensPerUser(currentUser User) ([]AccessToken, error)
 	GetAccountListTransactions(currentUser User, accessTokens []AccessToken, startDate string, endDate string) (interface{}, error)
@@ -104,7 +104,7 @@ func (s *service) AuthTokenToAccessTokenGopay(input RequestAPIV1AUTH, currentUse
 
 	resGetInstList, err := clientGetInstList.Do(reqGetInstList)
 
-	defer resGetInstList.Body.Close()
+	// defer resGetInstList.Body.Close()
 
 	// if resGetInstList.StatusCode != 200 {
 	// 	err = json.NewDecoder(resGetInstList.Body).Decode(&respDataSessionError)
@@ -126,8 +126,8 @@ func (s *service) AuthTokenToAccessTokenGopay(input RequestAPIV1AUTH, currentUse
 	return respDataSession, nil
 }
 
-func (s *service) OTPSessionToToken(input PayloadOTP, currentUser User) (interface{}, error) {
-	var respDataSessionError interface{}
+func (s *service) OTPSessionToToken(input PayloadOTP, currentUser User) (brickAuthEntity.BrickAuthResponse, error) {
+	// var respDataSessionError interface{}
 	var brickAuthResponse brickAuthEntity.BrickAuthResponse
 	var dataToAccessTokenToBeSaved AccessToken
 	phoneNumber := input.Username
@@ -157,12 +157,12 @@ func (s *service) OTPSessionToToken(input PayloadOTP, currentUser User) (interfa
 		"Authorization": {"Bearer public-production-ad98df55-fa5a-4664-8049-a5bfe4224887"},
 	}
 	resGetInstList, err := clientGetInstList.Do(reqGetInstList)
-	if resGetInstList.StatusCode != 200 {
-		err = json.NewDecoder(resGetInstList.Body).Decode(&respDataSessionError)
-	} else {
-		err = json.NewDecoder(resGetInstList.Body).Decode(&brickAuthResponse)
-	}
-
+	// if resGetInstList.StatusCode != 200 {
+	// 	err = json.NewDecoder(resGetInstList.Body).Decode(&respDataSessionError)
+	// } else {
+	// 	err = json.NewDecoder(resGetInstList.Body).Decode(&brickAuthResponse)
+	// }
+	err = json.NewDecoder(resGetInstList.Body).Decode(&brickAuthResponse)
 	dataToAccessTokenToBeSaved.AccessToken = brickAuthResponse.Data
 	dataToAccessTokenToBeSaved.InstitutionID = input.InstitutionID
 	dataToAccessTokenToBeSaved.UserEmail = currentUser.Email
@@ -172,9 +172,9 @@ func (s *service) OTPSessionToToken(input PayloadOTP, currentUser User) (interfa
 
 	fmt.Println("this is dataToAccessTokenToBeSaved : ", dataToAccessTokenToBeSaved)
 
-	if resGetInstList.StatusCode != 200 {
-		return respDataSessionError, nil
-	}
+	// if resGetInstList.StatusCode != 200 {
+	// 	return respDataSessionError, nil
+	// }
 	fmt.Println("ini return : ", brickAuthResponse)
 	return brickAuthResponse, nil
 }

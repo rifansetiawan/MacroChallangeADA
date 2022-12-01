@@ -345,14 +345,18 @@ func (h *userHandler) OTPSessionToToken(c *gin.Context) {
 
 	c.ShouldBindJSON(&input)
 
-	response, err := h.userService.OTPSessionToToken(input, currentUser)
-	if err != nil {
-		response := helper.APIResponse("Auth Bank Error Occured", http.StatusBadRequest, "error", nil)
-		c.JSON(http.StatusBadRequest, response)
-		return
+	response, _ := h.userService.OTPSessionToToken(input, currentUser)
+	// if err != nil {
+	// 	response := helper.APIResponse("Auth Bank Error Occured", http.StatusBadRequest, "error", nil)
+	// 	c.JSON(http.StatusBadRequest, response)
+	// 	return
+	// }
+	if response.Status == 500 {
+		fmt.Println("error nih di second step")
+		c.JSON(500, response)
+	} else {
+		c.JSON(200, response)
 	}
-
-	c.JSON(200, response)
 
 }
 
