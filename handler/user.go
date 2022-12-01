@@ -320,7 +320,9 @@ func (h *userHandler) AuthTokenToAccessTokenGopay(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, response)
+	returnResponse := helper.APIResponse("AuthToken 1st Step Succeded", http.StatusOK, "success", response)
+
+	c.JSON(200, returnResponse)
 
 }
 

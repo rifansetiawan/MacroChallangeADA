@@ -14,10 +14,10 @@ type User struct {
 }
 
 type Session struct {
-	Username  string
-	UniqueID  string
-	SessionID string
-	OtpToken  string
+	Username  string `json:"username"`
+	UniqueID  string `json:"uniqueId"`
+	SessionID string `json:"sessionId"`
+	OtpToken  string `json:"otpToken"`
 }
 
 type SessionPayload struct {
