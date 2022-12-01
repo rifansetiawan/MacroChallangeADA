@@ -24,7 +24,7 @@ type Service interface {
 	SaveGopayData(session DataSession) (Session, error)
 	FindOtpSession(input PayloadOTP) (Session, error)
 	AuthTokenToAccessToken(input RequestAPIV1AUTH, currentUser User) (interface{}, error)
-	AuthTokenToAccessTokenGopay(input RequestAPIV1AUTH, currentUser User) (interface{}, error)
+	AuthTokenToAccessTokenGopay(input RequestAPIV1AUTH, currentUser User) (brickAuthEntity.BrickAuthResponseGopay, error)
 	OTPSessionToToken(input PayloadOTP, currentUser User) (interface{}, error)
 	// GetAccountListTransactions(currentUser User) ([]string, error)
 	GetAccessTokensPerUser(currentUser User) ([]AccessToken, error)
@@ -84,7 +84,7 @@ func (s *service) AuthTokenToAccessToken(input RequestAPIV1AUTH, currentUser Use
 	return brickAuthResponse, nil
 }
 
-func (s *service) AuthTokenToAccessTokenGopay(input RequestAPIV1AUTH, currentUser User) (interface{}, error) {
+func (s *service) AuthTokenToAccessTokenGopay(input RequestAPIV1AUTH, currentUser User) (brickAuthEntity.BrickAuthResponseGopay, error) {
 	fmt.Println("this is request : ", input)
 	var respDataSessionError interface{}
 	var respDataSession brickAuthEntity.BrickAuthResponseGopay
