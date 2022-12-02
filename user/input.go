@@ -57,7 +57,7 @@ type AccessToken struct {
 type RequestAPIV1AUTH struct {
 	InstitutionId int    `json:"institution_id"`
 	Username      string `json:"username"`
-	Password      int    `json:"password"`
+	Password      string `json:"password"`
 }
 
 type RequestGopayOTP struct {
