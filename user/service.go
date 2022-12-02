@@ -77,7 +77,10 @@ func (s *service) AuthTokenToAccessToken(input RequestAPIV1AUTH, currentUser Use
 		dataToAccessTokenToBeSaved.UserEmail = currentUser.Email
 		dataToAccessTokenToBeSaved.UserName = currentUser.UserName
 		dataToAccessTokenToBeSaved.UserID = currentUser.UUID
-		s.repository.SaveAccessToken(dataToAccessTokenToBeSaved)
+		if strings.HasPrefix(brickAuthResponse.Data, "access-") {
+			s.DeleteExistingAccessTokensPerUser(currentUser, input.InstitutionId)
+			s.repository.SaveAccessToken(dataToAccessTokenToBeSaved)
+		}
 
 		fmt.Println("this is dataToAccessTokenToBeSaved : ", dataToAccessTokenToBeSaved)
 
