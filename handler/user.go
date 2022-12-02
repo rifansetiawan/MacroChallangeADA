@@ -282,9 +282,9 @@ func (h *userHandler) AuthTokenToAccessToken(c *gin.Context) {
 	var input user.RequestAPIV1AUTH
 
 	err := c.ShouldBindJSON(&input)
-	if err != nil {
-		return
-	}
+	// if err != nil {
+	// 	return
+	// }
 	response, err := h.userService.AuthTokenToAccessToken(input, currentUser)
 	if err != nil {
 		response := helper.APIResponse("Auth Bank Error Occured", http.StatusBadRequest, "error", nil)
