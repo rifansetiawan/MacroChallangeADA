@@ -24,7 +24,7 @@ type Service interface {
 	UpdateUser(input FormUpdateUserInput) (User, error)
 	SaveGopayData(session DataSession) (Session, error)
 	FindOtpSession(input PayloadOTP) (Session, error)
-	AuthTokenToAccessToken(input RequestAPIV1AUTH, currentUser User) (interface{}, error)
+	AuthTokenToAccessToken(input RequestAPIV1AUTH, currentUser User) (brickAuthEntity.BrickAuthResponse, error)
 	AuthTokenToAccessTokenGopay(input RequestAPIV1AUTH, currentUser User) (brickAuthEntity.BrickAuthResponseGopay, error)
 	OTPSessionToToken(input PayloadOTP, currentUser User) (brickAuthEntity.BrickAuthResponse, error)
 	// GetAccountListTransactions(currentUser User) ([]string, error)
@@ -43,9 +43,9 @@ func NewService(repository Repository) *service {
 	return &service{repository}
 }
 
-func (s *service) AuthTokenToAccessToken(input RequestAPIV1AUTH, currentUser User) (interface{}, error) {
+func (s *service) AuthTokenToAccessToken(input RequestAPIV1AUTH, currentUser User) (brickAuthEntity.BrickAuthResponse, error) {
 	fmt.Println("this is request : ", input)
-	var respDataSessionError interface{}
+	// var respDataSessionError interface{}
 	var dataToAccessTokenToBeSaved AccessToken
 	var brickAuthResponse brickAuthEntity.BrickAuthResponse
 
@@ -67,8 +67,8 @@ func (s *service) AuthTokenToAccessToken(input RequestAPIV1AUTH, currentUser Use
 	defer resGetInstList.Body.Close()
 
 	if resGetInstList.StatusCode != 200 {
-		err = json.NewDecoder(resGetInstList.Body).Decode(&respDataSessionError)
-		return respDataSessionError, nil
+		err = json.NewDecoder(resGetInstList.Body).Decode(&brickAuthResponse)
+		return brickAuthResponse, nil
 	} else {
 		err = json.NewDecoder(resGetInstList.Body).Decode(&brickAuthResponse)
 

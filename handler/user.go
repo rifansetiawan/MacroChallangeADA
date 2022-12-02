@@ -292,7 +292,7 @@ func (h *userHandler) AuthTokenToAccessToken(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, response)
+	c.JSON(response.Status, response)
 }
 
 type DataSession struct {
