@@ -100,7 +100,7 @@ func (r *repository) Update(user User) (User, error) {
 }
 
 func (r *repository) UpdateRegistId(user User) (User, error) {
-	err := r.db.Exec("UPDATE users SET registration_id = ? where uuid = ?", user.RegistrationId, user.UUID).Error
+	err := r.db.Exec("UPDATE users SET registration_id = ? where email = ?", user.RegistrationId, user.Email).Error
 	if err != nil {
 		return user, err
 	}
