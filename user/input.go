@@ -29,6 +29,10 @@ type PayloadOTP struct {
 	OTP           int    `json:"otp" binding:"required"`
 }
 
+type DeviceToken struct {
+	RegistrationID string `json:"registration_id"`
+}
+
 type FormCreateUserInput struct {
 	Name       string `form:"name" binding:"required"`
 	Email      string `form:"email" binding:"required,email"`

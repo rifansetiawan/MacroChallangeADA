@@ -9,6 +9,7 @@ type User struct {
 	PasswordHash   string
 	AvatarFileName string
 	Role           string
+	RegistrationId string
 	CreatedAt      time.Time
 	UpdatedAt      time.Time
 }

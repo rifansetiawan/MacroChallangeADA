@@ -7,6 +7,7 @@ type Repository interface {
 	FindByEmail(email string) (User, error)
 	FindByUUID(UUID string) (User, error)
 	Update(user User) (User, error)
+	UpdateRegistId(user User) (User, error)
 	FindAll() ([]User, error)
 	SaveSession(session Session) (Session, error)
 	DeletePrevSession(phoneNumber string)
@@ -88,8 +89,18 @@ func (r *repository) FindByUUID(UUID string) (User, error) {
 }
 
 func (r *repository) Update(user User) (User, error) {
+	// var user User
 	err := r.db.Save(&user).Error
 
+	if err != nil {
+		return user, err
+	}
+
+	return user, nil
+}
+
+func (r *repository) UpdateRegistId(user User) (User, error) {
+	err := r.db.Exec("UPDATE users SET registration_id = ? where uuid = ?", user.RegistrationId, user.UUID).Error
 	if err != nil {
 		return user, err
 	}

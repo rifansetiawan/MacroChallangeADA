@@ -67,6 +67,8 @@ func main() {
 	//Account List
 	api.GET("/account/list/:start/:end", authMiddleware(authService, userService), userHandler.AccountListTransactions)
 
+	api.POST("/device-token", authMiddleware(authService, userService), userHandler.SaveDeviceToken)
+
 	api.GET("/users/fetch", authMiddleware(authService, userService), userHandler.FetchUser)
 
 	router.Run(addr)

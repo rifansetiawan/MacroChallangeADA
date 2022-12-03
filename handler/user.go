@@ -390,6 +390,29 @@ func (h *userHandler) AccountListTransactions(c *gin.Context) {
 
 }
 
+func (h *userHandler) SaveDeviceToken(c *gin.Context) {
+	currentUser := c.MustGet("currentUser").(user.User)
+	fmt.Println(currentUser)
+
+	var input user.DeviceToken
+
+	c.ShouldBindJSON(&input)
+
+	updatedUser, err := h.userService.SaveDeviceTokenRegistrationId(currentUser, input)
+
+	fmt.Println(updatedUser)
+
+	if err != nil {
+		response := helper.APIResponse("Save Device Token Error Occured", http.StatusBadRequest, "error", nil)
+		c.JSON(http.StatusBadRequest, response)
+		return
+	}
+	formatter := user.FormatUserDeviceToken(updatedUser)
+
+	c.JSON(200, formatter)
+
+}
+
 // func (h *userHandler) AuthTokenToAccessToken(c *gin.Context) {
 // 	currentUser := c.MustGet("currentUser").(user.User)
 // 	fmt.Println(currentUser)

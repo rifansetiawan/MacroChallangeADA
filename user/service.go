@@ -31,6 +31,7 @@ type Service interface {
 	GetAccessTokensPerUser(currentUser User) ([]AccessToken, error)
 	GetAccountListTransactions(currentUser User, accessTokens []AccessToken, startDate string, endDate string) (interface{}, error)
 	DeleteExistingAccessTokensPerUser(currentUser User, institution_id int)
+	SaveDeviceTokenRegistrationId(currentUser User, input DeviceToken) (User, error)
 
 	// SaveAccessToken(userDetailandAccessToekn AccessToken) (AccessToken, error)
 }
@@ -229,6 +230,21 @@ func (s *service) SaveGopayData(session DataSession) (Session, error) {
 
 // 	return newSession, nil
 // }
+
+func (s *service) SaveDeviceTokenRegistrationId(currentUser User, input DeviceToken) (User, error) {
+	user, err := s.repository.FindByUUID(currentUser.UUID)
+	if err != nil {
+		return user, err
+	}
+	user.RegistrationId = input.RegistrationID
+
+	updatedUser, err := s.repository.UpdateRegistId(user)
+	if err != nil {
+		return updatedUser, err
+	}
+
+	return updatedUser, nil
+}
 
 func (s *service) RegisterUser(input RegisterUserInput) (User, error) {
 	user := User{}
