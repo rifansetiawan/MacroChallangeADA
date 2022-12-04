@@ -73,7 +73,7 @@ func scheduler() {
 		fmt.Println(lastTransactions.Amount)
 		panjangData := len(responseAccountListTransactionInterface.Data)
 		fmt.Println("panjangData : ", panjangData)
-		fmt.Println(responseAccountListTransactionInterface.Data[panjangData-1].Amount)
+		// fmt.Println(responseAccountListTransactionInterface.Data[panjangData-1].Amount)
 		if responseAccountListTransactionInterface.Data != nil {
 			if lastTransactions.Amount != responseAccountListTransactionInterface.Data[panjangData-1].Amount &&
 				lastTransactions.Description != responseAccountListTransactionInterface.Data[panjangData-1].Description {
