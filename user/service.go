@@ -417,8 +417,9 @@ func (s *service) GetAccountListTransactions(currentUser User, accessTokens []Ac
 					fmt.Println("ini transactionsssss : ", transactions.Data)
 					responseAccountLooping.Transactions = transactions.Data
 					mergedAccountListTransaction.Data = append(mergedAccountListTransaction.Data, responseAccountLooping)
-
-					s.repository.SaveLastTransactions(currentUser.UUID, currentUser.Email, currentUser.UserName, transactions.Data[0].Amount, transactions.Data[0].Description)
+					panjangData := len(transactions.Data)
+					fmt.Println("panjangData : ", panjangData)
+					s.repository.SaveLastTransactions(currentUser.UUID, currentUser.Email, currentUser.UserName, transactions.Data[panjangData-1].Amount, transactions.Data[panjangData-1].Description)
 
 				}
 			}
