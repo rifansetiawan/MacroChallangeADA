@@ -141,7 +141,7 @@ func task() {
 }
 func main() {
 	c := cron.New()
-	c.AddFunc("@every 3600s", scheduler)
+	c.AddFunc("@every 600s", scheduler)
 	c.Start()
 	dsn := "root:1234@tcp(127.0.0.1:3306)/kaia?charset=utf8mb4&parseTime=True&loc=Local"
 	//dsn server
