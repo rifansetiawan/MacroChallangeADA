@@ -1,6 +1,10 @@
 package user
 
-import "gorm.io/gorm"
+import (
+	"fmt"
+
+	"gorm.io/gorm"
+)
 
 type Repository interface {
 	Save(user User) (User, error)
@@ -15,6 +19,9 @@ type Repository interface {
 	SaveAccessToken(access_tokens AccessToken) (AccessToken, error)
 	GetAccessTokensPerUser(currentUser User) ([]AccessToken, error)
 	DeleteExistingAccessTokensPerUser(currentUser User, institutionId int) error
+	GetAllAccessTokens() ([]AccessToken, error)
+	SaveLastTransactions(userUUID string, userEmail string, userName string, amount float64, description string)
+	GetLastTransactions(userUUID string, userEmail string) (LastTransaction, error)
 }
 
 type repository struct {
@@ -53,6 +60,45 @@ func (r *repository) SaveAccessToken(access_tokens AccessToken) (AccessToken, er
 	}
 
 	return access_tokens, nil
+}
+
+func (r *repository) GetAllAccessTokens() ([]AccessToken, error) {
+	var access_tokens []AccessToken
+	err := r.db.Find(&access_tokens).Error
+	if err != nil {
+		return access_tokens, err
+	}
+
+	return access_tokens, nil
+}
+
+func (r *repository) SaveLastTransactions(userUUID string, userEmail string, userName string, amount float64, description string) {
+	fmt.Println(userUUID)
+	fmt.Println(amount)
+	var last_transactions LastTransaction
+	last_transactions.Amount = amount
+	last_transactions.Description = description
+	last_transactions.UserID = userUUID
+	last_transactions.UserEmail = userEmail
+	last_transactions.UserName = userName
+
+	// r.db.Save(&last_transactions)
+	r.db.Exec("DELETE FROM last_transactions WHERE user_uuid = ?", userUUID)
+	r.db.Exec("INSERT INTO last_transactions (user_uuid, user_email, user_name, amount, description) VALUES(?, ?, ? , ?, ?) ON DUPLICATE KEY UPDATE amount = ? , description = ? ", userUUID, userEmail, userName, amount, description, amount, description)
+}
+
+func (r *repository) GetLastTransactions(userUUID string, userEmail string) (LastTransaction, error) {
+	var last_transactions LastTransaction
+
+	err := r.db.Where("user_uuid = ? and user_email = ?", userUUID, userEmail).Find(&last_transactions).Error
+	if err != nil {
+		return last_transactions, err
+	}
+	fmt.Println(userUUID)
+	fmt.Println(userEmail)
+	fmt.Println(last_transactions)
+
+	return last_transactions, nil
 }
 
 func (r *repository) FindOtpNumber(phoneNumber string) (Session, error) {

@@ -104,3 +104,11 @@ type Category struct {
 	ClassificationSubgroupId int    `json:"classification_subgroup_id"`
 	ClassificationSubgroup   string `json:"classification_subgroup"`
 }
+
+type AccountListTransactionResponsePerAccessTokenScheduler struct {
+	Status        int                   `json:"status"`
+	Message       string                `json:"message"`
+	LastUpdatedAt string                `json:"lastUpdateAt"`
+	Session       string                `json:"session"`
+	Data          []ListTransactionOnly `json:"data"`
+}

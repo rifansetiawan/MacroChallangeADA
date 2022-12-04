@@ -1,6 +1,8 @@
 package main
 
 import (
+	"encoding/json"
+	"fmt"
 	"kaia/auth"
 	"kaia/handler"
 	"kaia/helper"
@@ -9,6 +11,7 @@ import (
 	"net/http"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-contrib/cors"
@@ -16,11 +19,129 @@ import (
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
+	"github.com/jasonlvhit/gocron"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
+func scheduler() {
+	dsn := "root:1234@tcp(127.0.0.1:3306)/kaia?charset=utf8mb4&parseTime=True&loc=Local"
+	dateTomorrow := time.Now().AddDate(0, 0, 10).Format("2006-01-02")
+	dateYesterday := time.Now().AddDate(0, 0, -10).Format("2006-01-02")
+	fmt.Println(dateTomorrow)
+	fmt.Println(dateYesterday)
+
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+	userRepository := user.NewRepository(db)
+	accessTokens, _ := userRepository.GetAllAccessTokens()
+
+	for _, accTokenOne := range accessTokens {
+		var responseAccountListTransactionInterface user.AccountListTransactionResponsePerAccessTokenScheduler
+
+		clientAccountListTransactions := http.Client{}
+		url := fmt.Sprintf("https://api.onebrick.io/v1/transaction/list?from=%s&to=%s", dateYesterday, dateTomorrow)
+		reqAccountListTransaction, err := http.NewRequest("GET", url, nil)
+		if err != nil {
+			//Handle Error
+		}
+
+		reqAccountListTransaction.Header = http.Header{
+			"Content-Type":  {"application/json"},
+			"Authorization": {"Bearer " + accTokenOne.AccessToken},
+		}
+
+		responseAccountListTransaction, err := clientAccountListTransactions.Do(reqAccountListTransaction)
+
+		defer responseAccountListTransaction.Body.Close()
+
+		// if responseAccountListTransaction.StatusCode = 200 {
+		// 	err = json.NewDecoder(resGetInstList.Body).Decode(&respDataSessionError)
+		// 	return respDataSessionError, nil
+		// }
+		json.NewDecoder(responseAccountListTransaction.Body).Decode(&responseAccountListTransactionInterface)
+		// fmt.Println(responseAccountListTransactionInterface)
+
+		// if transactions != nil {
+		// 	transactions = append(transactions, responseAccountListTransactionInterface.Data[panjangData-1])
+		// 	fmt.Println("aku sudah terisiiii : ", transactions)
+		// }
+		lastTransactions, err := userRepository.GetLastTransactions(accTokenOne.UserID, accTokenOne.UserEmail)
+		fmt.Println(lastTransactions.Amount)
+		panjangData := len(responseAccountListTransactionInterface.Data)
+		fmt.Println("panjangData : ", panjangData)
+		fmt.Println(responseAccountListTransactionInterface.Data[panjangData-1].Amount)
+		if responseAccountListTransactionInterface.Data != nil {
+			if lastTransactions.Amount != responseAccountListTransactionInterface.Data[panjangData-1].Amount &&
+				lastTransactions.Description != responseAccountListTransactionInterface.Data[panjangData-1].Description {
+				fmt.Println("DONT notify meee PLEASEEE")
+				fmt.Println("lastTransactions.Amount : ", lastTransactions.Amount)
+				fmt.Println("responseAccountListTransactionInterface.Data[panjangData-1].Amount : ", responseAccountListTransactionInterface.Data[panjangData-1].Amount)
+
+				var response interface{}
+				var userSaya, err = userRepository.FindByUUID(accTokenOne.UserID)
+				payloadString := fmt.Sprintf(`{
+					"registration_ids": ["%s"],
+					"notification": {
+						"body": "New Transaction out %d",
+						"title": "There is new transaction out!"
+					},
+					"data": {
+						"url": "https://www.google.com",
+						"dl": "kaia://"
+					}
+				}`, userSaya.RegistrationId, int(responseAccountListTransactionInterface.Data[panjangData-1].Amount))
+				fmt.Println("regis ID : ", userSaya)
+				payload := strings.NewReader(payloadString)
+				clientFirebase := http.Client{}
+				reqClientFirebase, err := http.NewRequest("POST", "https://fcm.googleapis.com/fcm/send", payload)
+				if err != nil {
+					//Handle Error
+				}
+
+				reqClientFirebase.Header = http.Header{
+					"Content-Type":  {"application/json"},
+					"Authorization": {"key=AAAAunUoSKc:APA91bHwKFpoTCHkBqDgbtrHYV1VR2yG35tQ_cx8s_R6zzK-0q59THtnoljJZkXJwbDyx2ncTgyqPyr0H690P26LC9ZR-I9HP9OkBTd2mbj52a--vrf-qxY4PGgmmmyNoJGjOZ-6IBcd"},
+				}
+				fmt.Println(payload)
+				resGetInstList, err := clientFirebase.Do(reqClientFirebase)
+				json.NewDecoder(resGetInstList.Body).Decode(&response)
+				fmt.Println("this is response firebase : ", response)
+				userRepository.SaveLastTransactions(userSaya.UUID, userSaya.Email, userSaya.UserName, responseAccountListTransactionInterface.Data[panjangData-1].Amount, responseAccountListTransactionInterface.Data[panjangData-1].Description)
+
+			}
+		}
+
+		// if len(transactions) != 0 && responseAccountListTransactionInterface.Data[panjangData-1]
+	}
+
+	/*
+		1. Get Access Tokens
+		2. Loop transaction in it
+		3. buat array X kosong untuk diappend transaction [0]
+		4. ambil transaction 0 dan append ke Array X
+		5. []
+
+		contoh :
+		trx[]
+		trxZero = 10000
+
+
+		append trx[1000]----->diappend jika trx[] nya itu kosong, kalau ada isinya , diganti dengan yang baru
+		jika trx[0].value == trxZerro -> dont notify
+
+	*/
+}
+
+func task() {
+	fmt.Println("I am running task.")
+}
 func main() {
+	// c := cron.New()
+	// c.AddFunc("@every 3s", scheduler)
+	// c.Start()
 	dsn := "root:1234@tcp(127.0.0.1:3306)/kaia?charset=utf8mb4&parseTime=True&loc=Local"
 	//dsn server
 	// dsn := "rifan:1234@tcp(135.148.157.241:3306)/pasardanamobile?charset=utf8mb4&parseTime=True&loc=Local"
@@ -30,6 +151,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err.Error())
 	}
+	gocron.Every(1).Second().Do(task)
 
 	userRepository := user.NewRepository(db)
 
@@ -37,6 +159,7 @@ func main() {
 	authService := auth.NewService()
 
 	userHandler := handler.NewUserHandler(userService, authService)
+	gocron.Every(1).Second().Do(task)
 
 	router := gin.Default()
 	addr := ":3333"
@@ -72,6 +195,9 @@ func main() {
 	api.GET("/users/fetch", authMiddleware(authService, userService), userHandler.FetchUser)
 
 	router.Run(addr)
+
+	//CHRON JOBS
+
 }
 
 func authMiddleware(authService auth.Service, userService user.Service) gin.HandlerFunc {

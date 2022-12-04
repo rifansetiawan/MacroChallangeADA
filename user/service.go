@@ -418,6 +418,8 @@ func (s *service) GetAccountListTransactions(currentUser User, accessTokens []Ac
 					responseAccountLooping.Transactions = transactions.Data
 					mergedAccountListTransaction.Data = append(mergedAccountListTransaction.Data, responseAccountLooping)
 
+					s.repository.SaveLastTransactions(currentUser.UUID, currentUser.Email, currentUser.UserName, transactions.Data[0].Amount, transactions.Data[0].Description)
+
 				}
 			}
 

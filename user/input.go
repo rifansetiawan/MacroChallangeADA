@@ -58,6 +58,14 @@ type AccessToken struct {
 	AccessToken   string `json:"access_token"`
 }
 
+type LastTransaction struct {
+	UserID      string  `json:"user_id"`
+	UserEmail   string  `json:"user_email"`
+	UserName    string  `json:"user_name"`
+	Amount      float64 `json:"amount"`
+	Description string  `json:"description"`
+}
+
 type RequestAPIV1AUTH struct {
 	InstitutionId int    `json:"institution_id"`
 	Username      string `json:"username"`
