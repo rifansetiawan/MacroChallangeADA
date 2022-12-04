@@ -84,7 +84,7 @@ func (r *repository) SaveLastTransactions(userUUID string, userEmail string, use
 
 	// r.db.Save(&last_transactions)
 	r.db.Exec("DELETE FROM last_transactions WHERE user_uuid = ?", userUUID)
-	r.db.Exec("INSERT INTO last_transactions (user_uuid, user_email, user_name, amount, description) VALUES(?, ?, ? , ?, ?) ON DUPLICATE KEY UPDATE amount = ? , description = ? ", userUUID, userEmail, userName, amount, description, amount, description)
+	r.db.Exec("INSERT INTO last_transactions (user_uuid, user_email, user_name, amount, description) VALUES(?, ?, ? , ?, ?)", userUUID, userEmail, userName, amount, description)
 }
 
 func (r *repository) GetLastTransactions(userUUID string, userEmail string) (LastTransaction, error) {
