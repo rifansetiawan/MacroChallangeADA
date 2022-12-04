@@ -20,6 +20,7 @@ import (
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
 	"github.com/jasonlvhit/gocron"
+	"github.com/robfig/cron"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -139,9 +140,9 @@ func task() {
 	fmt.Println("I am running task.")
 }
 func main() {
-	// c := cron.New()
-	// c.AddFunc("@every 3s", scheduler)
-	// c.Start()
+	c := cron.New()
+	c.AddFunc("@every 3600s", scheduler)
+	c.Start()
 	dsn := "root:1234@tcp(127.0.0.1:3306)/kaia?charset=utf8mb4&parseTime=True&loc=Local"
 	//dsn server
 	// dsn := "rifan:1234@tcp(135.148.157.241:3306)/pasardanamobile?charset=utf8mb4&parseTime=True&loc=Local"
