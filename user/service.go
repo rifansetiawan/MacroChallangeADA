@@ -79,7 +79,7 @@ func (s *service) AuthTokenToAccessToken(input RequestAPIV1AUTH, currentUser Use
 		dataToAccessTokenToBeSaved.UserName = currentUser.UserName
 		dataToAccessTokenToBeSaved.UserID = currentUser.UUID
 		if strings.HasPrefix(brickAuthResponse.Data, "access-") {
-			s.DeleteExistingAccessTokensPerUser(currentUser, input.InstitutionId)
+			// s.DeleteExistingAccessTokensPerUser(currentUser, input.InstitutionId)
 			s.repository.SaveAccessToken(dataToAccessTokenToBeSaved)
 		}
 
@@ -175,7 +175,7 @@ func (s *service) OTPSessionToToken(input PayloadOTP, currentUser User) (brickAu
 	dataToAccessTokenToBeSaved.UserName = currentUser.UserName
 	dataToAccessTokenToBeSaved.UserID = currentUser.UUID
 	if strings.HasPrefix(brickAuthResponse.Data, "access-") {
-		s.DeleteExistingAccessTokensPerUser(currentUser, input.InstitutionID)
+		// s.DeleteExistingAccessTokensPerUser(currentUser, input.InstitutionID)
 		s.repository.SaveAccessToken(dataToAccessTokenToBeSaved)
 	}
 
