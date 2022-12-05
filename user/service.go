@@ -419,9 +419,9 @@ func (s *service) GetAccountListTransactions(currentUser User, accessTokens []Ac
 					mergedAccountListTransaction.Data = append(mergedAccountListTransaction.Data, responseAccountLooping)
 					panjangData := len(transactions.Data)
 					fmt.Println("panjangData : ", panjangData)
-					if transactions.Data != nil {
-						s.repository.SaveLastTransactions(currentUser.UUID, currentUser.Email, currentUser.UserName, transactions.Data[panjangData-1].Amount, transactions.Data[panjangData-1].Description)
-					}
+					// if transactions.Data != nil {
+					// 	s.repository.SaveLastTransactions(currentUser.UUID, currentUser.Email, currentUser.UserName, transactions.Data[panjangData-1].Amount, transactions.Data[panjangData-1].Description)
+					// }
 
 				}
 			}
